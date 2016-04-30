@@ -1,6 +1,19 @@
 require 'rails_helper'
 
+def fake_movie
+  {:title =>"fake", :director => "person", :rating => "G"}
+end
+
 describe MoviesController, type: :controller do
+  describe 'create movies' do
+    it 'should create a movie' do
+      expect {post :create, :movie => fake_movie}.to change(Movie, :count).by(1)
+    end
+    it 'should redirect to the home page' do
+      post :create, {:movie => fake_movie}
+      expect(response).to redirect_to(:controller => 'movies', :action => 'index')
+    end
+  end
   describe 'search by director' do
     context 'movie has director' do
       it 'should call the relevent model method' do
